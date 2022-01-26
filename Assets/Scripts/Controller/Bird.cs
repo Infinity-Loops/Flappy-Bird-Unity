@@ -102,12 +102,7 @@ namespace DotGears.Flappy
         }
         private void Update()
         {
-#if UNITY_ANDROID && !UNITY_EDITOR
-            Tapping = Touch.GetTouchDown();
-#else
-            //Tapping = Input.GetMouseButtonDown(0);
-            Tapping = Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0);
-#endif
+            Tapping = Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0);
             if (Idle)
             {
                 Rigidbody.bodyType = RigidbodyType2D.Kinematic;

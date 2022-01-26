@@ -78,11 +78,7 @@ namespace DotGears.Flappy
         }
         private void Update()
         {
-#if UNITY_ANDROID && !UNITY_EDITOR
-            Tapping = Touch.GetTouchDown();
-#else
             Tapping = Input.GetMouseButtonDown(0);
-#endif
             if (Tapping && OnGameScreen)
             {
                 if (!FadeGameScreen)
