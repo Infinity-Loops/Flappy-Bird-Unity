@@ -26,6 +26,7 @@ namespace DotGears.Flappy
         public Sprite DayBackground;
         public Sprite NightBackground;
         [Header("Global Settings")]
+        public float TextAnimation = 1f;
         public float FadeDuration = 0.5f;
         public float IdleVerticalUp = 0.5f;
         public float IdleVerticalDown = 0.4f;
@@ -129,6 +130,19 @@ namespace DotGears.Flappy
             DestroyImmediate(dotween);
             UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         }
+        IEnumerator SetTextIncremental(UnityEngine.UI.Text Text, int value, float time)
+        {
+            int svalue = 0;
+            while (svalue != value)
+            {
+                for (int i = 0; i < value; i++)
+                {
+                    yield return new WaitForSeconds(time / 100);
+                    svalue++;
+                    Text.text = svalue.ToString();
+                }
+            }
+        }
         public void ShowScoreScreen()
         {
             if (PlayerPrefs.HasKey("HighScore"))
@@ -138,14 +152,14 @@ namespace DotGears.Flappy
                     PlayerPrefs.SetInt("OldScore", PlayerPrefs.GetInt("HighScore"));
                     PlayerPrefs.SetInt("HighScore", Score);
                     New.SetActive(true);
-                    ScorePlace.DOText(Score.ToString(), 1);
+                    StartCoroutine(SetTextIncremental(ScorePlace, Score, TextAnimation));
                     BestScorePlace.text = PlayerPrefs.GetInt("OldScore").ToString();
-                    BestScorePlace.DOText(Score.ToString(), 1);
+                    StartCoroutine(SetTextIncremental(BestScorePlace, Score, TextAnimation));
                 }
                 else if (Score < PlayerPrefs.GetInt("HighScore"))
                 {
-                    ScorePlace.DOText(Score.ToString(), 1);
-                    BestScorePlace.DOText(PlayerPrefs.GetInt("HighScore").ToString(), 1);
+                    StartCoroutine(SetTextIncremental(ScorePlace, Score, TextAnimation));
+                    StartCoroutine(SetTextIncremental(BestScorePlace, PlayerPrefs.GetInt("HighScore"), TextAnimation));
                 }
             }
             else
@@ -155,8 +169,8 @@ namespace DotGears.Flappy
                     New.SetActive(true);
                 }
                 PlayerPrefs.SetInt("HighScore", Score);
-                ScorePlace.DOText(Score.ToString(), 1);
-                BestScorePlace.DOText(Score.ToString(), 1);
+                StartCoroutine(SetTextIncremental(ScorePlace, Score, TextAnimation));
+                StartCoroutine(SetTextIncremental(BestScorePlace, Score, TextAnimation));
             }
             if(Score >= 10)
             {
