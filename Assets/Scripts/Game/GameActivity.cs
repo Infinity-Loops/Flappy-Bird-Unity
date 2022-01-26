@@ -107,8 +107,14 @@ namespace DotGears.Flappy
         {
             if (!CloseGameScreenRequested)
             {
+                StartCoroutine(CloseInGame(0.15f));
                 GameScreen.DOFade(0, 0.15f);
             }
+        }
+        IEnumerator CloseInGame(float time)
+        {
+            yield return new WaitForSeconds(time);
+            GameScreen.gameObject.SetActive(false);
         }
         public void ResetGame()
         {
